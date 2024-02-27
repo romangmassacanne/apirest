@@ -2,10 +2,12 @@
 
 one:
   username: MyString
+  email: MyString
   password: MyString
   balance: 1.5
 
 two:
   username: MyString
+  email: MyString
   password: MyString
   balance: 1.5

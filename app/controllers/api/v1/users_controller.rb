@@ -1,5 +1,6 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < Api::V1::ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
+  before_action :authenticate_user, only: [:index]
 
   # GET /users
   def index
@@ -16,7 +17,7 @@ class Api::V1::UsersController < ApplicationController
   # POST /users
   def create
     @user = User.new(user_params)
-
+    puts("ESTOOOOOOOS: #{user_params}")
     if @user.save
       render json: @user, status: :created, location: @user
     else
@@ -46,6 +47,6 @@ class Api::V1::UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:username, :password, :balance)
+      params.require(:user).permit(:username, :email, :password, :balance)
     end
 end
