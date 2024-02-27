@@ -1,11 +1,9 @@
 class Api::V1::UsersController < Api::V1::ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
-  before_action :authenticate_user, only: [:index]
 
   # GET /users
   def index
     @users = User.all
-
     render json: @users
   end
 
@@ -17,7 +15,6 @@ class Api::V1::UsersController < Api::V1::ApplicationController
   # POST /users
   def create
     @user = User.new(user_params)
-    puts("ESTOOOOOOOS: #{user_params}")
     if @user.save
       render json: @user, status: :created, location: @user
     else
