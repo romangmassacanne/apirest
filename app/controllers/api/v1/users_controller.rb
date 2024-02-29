@@ -1,9 +1,10 @@
 class Api::V1::UsersController < Api::V1::ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
+  skip_before_action :authenticate_request, only: [:create]
 
   # GET /users
   def index
-    @users = User.all
+    @users = Api::V1::User.all
     render json: @users
   end
 
@@ -13,10 +14,18 @@ class Api::V1::UsersController < Api::V1::ApplicationController
   end
 
   # POST /users
+  # Se crea por default con una cuenta en dolares, a modo de ejemplo se le coloca 1000 usd para empezar
   def create
-    @user = User.new(user_params)
+    @user = Api::V1::User.new(user_params)
     if @user.save
-      render json: @user, status: :created, location: @user
+      currency = Api::V1::Currency.find_by(name: "USD")
+      currency_account = Api::V1::CurrencyAccount.new(user_id: @user.id, currency_id: currency.id, balance: 1000)
+      if currency_account.save
+        render json: @user, status: :created, location: @user
+      else
+        @user.destroy!
+        render json: currency_account.errors, status: :unprocessable_entity
+      end 
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -44,6 +53,6 @@ class Api::V1::UsersController < Api::V1::ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:username, :email, :password, :balance)
+      params.require(:user).permit(:username, :email, :password)
     end
 end

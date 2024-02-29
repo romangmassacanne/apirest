@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       resources :users
       get '/', to: 'home#index'
       post 'auth/login', to: 'authentication#login'
+      resources :transactions, only: [:index, :show, :create]
+      #post '/transactions', to: 'transactions#create'
     end
   end
   
