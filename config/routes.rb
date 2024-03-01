@@ -1,21 +1,13 @@
-Rails.application.routes.draw do
-  
-
+Rails.application.routes.draw do 
   namespace :api do
     namespace :v1 do 
       resources :users
       get '/', to: 'home#index'
       post 'auth/login', to: 'authentication#login'
-      resources :transactions, only: [:index, :show, :create]
-      #post '/transactions', to: 'transactions#create'
+      resources :transactions, only: [:show, :create, :index]
+      resources :currencies
     end
   end
-  
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get '/', to: redirect('/404.html')
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
-
-  # Defines the root path route ("/")
 end

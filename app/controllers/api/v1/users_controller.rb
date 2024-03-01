@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::ApplicationController
-  before_action :set_user, only: %i[ show update destroy ]
+  before_action :set_user, only: %i[ show update destroy]
   skip_before_action :authenticate_request, only: [:create]
 
   # GET /users
@@ -48,7 +48,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      @user = Api::V1::User.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
