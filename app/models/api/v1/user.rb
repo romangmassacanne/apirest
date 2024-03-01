@@ -19,12 +19,4 @@ class Api::V1::User < ApplicationRecord
         end
     end
 
-    def subtract_balance(currency_account, amount)
-        currency_account.sub_balance(amount)
-    end 
-
-    def add_balance(currency_account, amount)
-        
-    end
-
 end

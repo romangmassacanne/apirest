@@ -1,0 +1,328 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "API de Transacciones"
+  description: "Es una aplicación que funciona como un Exchange"
+basePath: "/api/v1"
+paths:
+  /users:
+    get:
+      summary: "Obtener todos los usuarios"
+      description: "Devuelve una lista de todos los usuarios registrados en el sistema. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: "Lista de usuarios obtenida exitosamente."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+    post:
+      summary: "Crear un nuevo usuario"
+      description: "Crea un nuevo usuario en el sistema. No se requiere autenticación para este endpoint."
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "Información del usuario a ser creado."
+          required: true
+          schema:
+            $ref: "#/definitions/NewUserWrapper"
+      responses:
+        201:
+          description: "Usuario creado exitosamente."
+          schema:
+            $ref: "#/definitions/User"
+        422:
+          description: "Error de validación."
+  /users/{id}:
+    get:
+      summary: "Obtener un usuario por ID"
+      description: "Devuelve los detalles de un usuario específico identificado por su ID. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID del usuario a obtener."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Usuario obtenido exitosamente."
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "Usuario no encontrado."
+    delete:
+      summary: "Eliminar un usuario por ID"
+      description: "Elimina un usuario específico identificado por su ID. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID del usuario a eliminar."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        204:
+          description: "Usuario eliminado exitosamente."
+        404:
+          description: "Usuario no encontrado."
+  /:
+    get:
+      summary: "Obtener precio actual del Bitcoin en USD"
+      description: "Devuelve el precio actual del Bitcoin en dólares estadounidenses (USD). Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: "Precio del Bitcoin obtenido exitosamente."
+          schema:
+            type: "object"
+            properties:
+              bitcoin_price:
+                type: "string"
+                description: "Precio actual del Bitcoin en USD."
+        500:
+          description: "Error interno del servidor."
+          schema:
+            type: "object"
+            properties:
+              error:
+                type: "string"
+                description: "Mensaje de error detallado."
+  /transactions:
+    get:
+      summary: "Obtener todas las transacciones del usuario logueado"
+      description: "Devuelve una lista de todas las transacciones realizadas por el usuario logueado. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: "Lista de transacciones obtenida exitosamente."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Transaction"
+    post:
+      summary: "Crear una nueva transacción"
+      description: "Crea una nueva transacción en el sistema. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "Información de la transacción a ser creada."
+          required: true
+          schema:
+            $ref: "#/definitions/NewTransactionWrapper"
+      responses:
+        201:
+          description: "Transacción creada exitosamente."
+          schema:
+            $ref: "#/definitions/Transaction"
+        404:
+          description: "El usuario no posee suficiente saldo para realizar la transacción"
+  /auth/login:
+    post:
+      summary: "Iniciar sesión"
+      description: "Inicia sesión de usuario y devuelve un token JWT válido para autenticación posterior."
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "Credenciales de usuario para iniciar sesión."
+          required: true
+          schema:
+            $ref: "#/definitions/LoginCredentials"
+      responses:
+        200:
+          description: "Inicio de sesión exitoso."
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+                description: "Token JWT generado para la autenticación."
+        401:
+          description: "Credenciales de inicio de sesión inválidas."
+  /currencies:
+    get:
+      summary: "Obtener todas las monedas"
+      description: "Devuelve una lista de todas las monedas disponibles en el sistema. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: "Lista de monedas obtenida exitosamente."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Currency"
+    post:
+      summary: "Crear una nueva moneda"
+      description: "Crea una nueva moneda en el sistema. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "Detalles de la nueva moneda a crear."
+          required: true
+          schema:
+            $ref: "#/definitions/NewCurrencyWrapper"
+      responses:
+        201:
+          description: "Moneda creada exitosamente."
+          schema:
+            $ref: "#/definitions/Currency"
+        422:
+          description: "Error de validación."
+  /currencies/{id}:
+    get:
+      summary: "Obtener una moneda por ID"
+      description: "Devuelve los detalles de una moneda específica identificada por su ID. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID de la moneda a obtener."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Moneda obtenida exitosamente."
+          schema:
+            $ref: "#/definitions/Currency"
+        404:
+          description: "Moneda no encontrada."
+    delete:
+      summary: "Eliminar una moneda por ID"
+      description: "Elimina una moneda específica identificada por su ID. Se requiere autenticación mediante un token JWT en el header."
+      security:
+        - JWT: []
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID de la moneda a eliminar."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        204:
+          description: "Moneda eliminada exitosamente."
+        404:
+          description: "Moneda no encontrada."
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      email:
+        type: "string"
+      password_digest:
+        type: "string"
+  NewUser:
+    type: "object"
+    required:
+      - username
+      - email
+      - password
+    properties:
+      username:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+  NewUserWrapper:
+    type: "object"
+    properties:
+      user:
+        $ref: "#/definitions/NewUser"
+  Transaction:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      currency_from:
+        type: "string"
+      currency_to:
+        type: "string"
+      amount_from:
+        type: "number"
+      amount_to:
+        type: "number"
+      user_id:
+        type: "integer"
+        format: "int64"
+  NewTransaction:
+    type: "object"
+    required:
+      - currency_from
+      - currency_to
+      - amount_from
+    properties:
+      currency_from:
+        type: "string"
+      currency_to:
+        type: "string"
+      amount_from:
+        type: "number"
+  LoginCredentials:
+    type: "object"
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+  Currency:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      api_reference:
+        type: "string"
+  NewCurrency:
+    type: "object"
+    required:
+      - name
+      - api_reference
+    properties:
+      name:
+        type: "string"
+      api_reference:
+        type: "string"
+  NewCurrencyWrapper:
+    type: "object"
+    properties:
+      currency:
+        $ref: "#/definitions/NewCurrency"
+  
+  NewTransactionWrapper:
+    type: "object"
+    properties:
+      transaction:
+        $ref: "#/definitions/NewTransaction"
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: "Bearer token"

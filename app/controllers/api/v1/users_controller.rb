@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::ApplicationController
-  before_action :set_user, only: %i[ show update destroy]
+  before_action :set_user, only: %i[ show destroy]
   skip_before_action :authenticate_request, only: [:create]
 
   # GET /users
@@ -19,7 +19,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
     @user = Api::V1::User.new(user_params)
     if @user.save
       currency = Api::V1::Currency.find_by(name: "USD")
-      currency_account = Api::V1::CurrencyAccount.new(user_id: @user.id, currency_id: currency.id, balance: 1000)
+      currency_account = Api::V1::CurrencyAccount.new(user_id: @user.id, currency_id: currency.id, balance: 10000)
       if currency_account.save
         render json: @user, status: :created, location: @user
       else
@@ -31,14 +31,6 @@ class Api::V1::UsersController < Api::V1::ApplicationController
     end
   end
 
-  # PATCH/PUT /users/1
-  def update
-    if @user.update(user_params)
-      render json: @user
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
-  end
 
   # DELETE /users/1
   def destroy

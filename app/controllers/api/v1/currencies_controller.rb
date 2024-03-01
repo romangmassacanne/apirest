@@ -1,6 +1,6 @@
 class Api::V1::CurrenciesController < Api::V1::ApplicationController
 
-  before_action :set_currency, only: %i[ show update destroy]
+  before_action :set_currency, only: %i[ show destroy]
 
   # GET /currencies
   def index
@@ -24,14 +24,6 @@ class Api::V1::CurrenciesController < Api::V1::ApplicationController
     end
   end
 
-  # PATCH/PUT /currencies/1
-  def update
-    if @currency.update(currency_params)
-      render json: @currency
-    else
-      render json: @currency.errors, status: :unprocessable_entity
-    end
-  end
 
   # DELETE /currencies/1
   def destroy

@@ -7,3 +7,7 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+Api::V1::Currency.create(name: "USD")
+Api::V1::Currency.create(name: "BTC", api_reference: 'https://api.coindesk.com/v1/bpi/currentprice/USD.json' )
+
+puts "Seed ejecutado correctamente."
