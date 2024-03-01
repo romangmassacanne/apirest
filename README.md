@@ -22,8 +22,6 @@ Comentarios en el código: Puedes encontrar comentarios en el código que explic
 
 Protección del dinero: La API no posee protección del dinero en caso de falla u otros escenarios.
 
-Detalle de las transacciones: Aunque las transacciones se realizan utilizando siglas como BTC y USD, en la presentación se muestran con identificadores. Esto se debe a que no se consideró esencial mostrar los detalles completos de las transacciones en este ejercicio.
-
 Presentación de datos: En caso de necesitar presentar los datos de alguna manera específica, se puede utilizar una gema como Jbuilder o un serializador para cada clase.
 
 Funcionalidades no implementadas: La capacidad de ingresar y retirar dinero no se ha modelado en la API. Los usuarios comienzan con un saldo inicial de 10.000 dólares y este se va actualizando conforme realizan transacciones.

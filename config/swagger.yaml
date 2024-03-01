@@ -263,9 +263,6 @@ definitions:
         type: "number"
       amount_to:
         type: "number"
-      user_id:
-        type: "integer"
-        format: "int64"
   NewTransaction:
     type: "object"
     required:
